@@ -1,0 +1,14 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  pdfgenerator:
+    image: pdfgenerator
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5272:5272
+    environment: 
+      - Authentication__Schemes__Bearer__ValidIssuer=docker env variable
