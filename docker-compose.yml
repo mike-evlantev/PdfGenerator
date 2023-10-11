@@ -11,4 +11,4 @@ services:
     ports:
       - 5272:5272
     environment: 
-      - Authentication__Schemes__Bearer__ValidIssuer=docker env variable
+      - Authentication__Schemes__Bearer__ValidIssuer=${JWT_VALID_ISSUER}
