@@ -8,7 +8,8 @@ public static class PdfService
 
         using (var memoryStream = new MemoryStream())
         {
-            HtmlConverter.ConvertToPdf(htmlContent, memoryStream);
+            ConverterProperties converterProperties = new ConverterProperties();
+            HtmlConverter.ConvertToPdf(htmlContent, memoryStream, converterProperties);
             bytes = memoryStream.ToArray();
         }
 

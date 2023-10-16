@@ -10,8 +10,8 @@ var app = builder.Build();
 
 app.MapGet("/ping", () => 
 {
-    var issuer = builder.Configuration["Authentication:Schemes:Bearer:ValidIssuer"]?.ToString();//.GetSection("Authentication");
-    //var issuer = builder.Configuration["Logging"];
+    var issuer = builder.Configuration["Authentication:Schemes:Bearer:ValidIssuer"];
+
     return Results.Ok(issuer);
 });
 
@@ -21,9 +21,20 @@ app.MapPost("/generate", (GeneratorInput input) =>
     {
         return Results.BadRequest("PDF Generator error: HTML missing");
     }
+
     var pdf = PdfService.CreatePdf(input.Html);
-    //return Results.File(pdf, "application/pdf", "GeneratedPdf.pdf");
     return Results.Ok(pdf);
+});
+
+app.MapPost("/download", (GeneratorInput input) => 
+{
+    if (string.IsNullOrEmpty(input.Html))
+    {
+        return Results.BadRequest("PDF Generator error: HTML missing");
+    }
+
+    var pdf = PdfService.CreatePdf(input.Html);
+    return Results.File(pdf, "application/pdf", "GeneratedPdf.pdf");
 });
 
 app.MapPost("/token", (User user) => $"Generation token for user {user.Username}");
