@@ -26,7 +26,7 @@ public class PdfService : IDisposable
                     PagesCount = true,
                     HtmlContent = htmlContent,
                     WebSettings = { DefaultEncoding = "utf-8" },
-                    HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+                    HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Spacing = 2.812 }
                 }
             }
         };
