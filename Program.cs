@@ -4,9 +4,8 @@ using WkHtmlToPdfDotNet.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer();
-
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddSingleton<PdfService>();
 
@@ -32,7 +31,7 @@ app.MapPost("/generate", (GeneratorInput input) =>
 
     var pdf = pdfService.GeneratePdf(input.Html);
     return Results.Ok(pdf);
-});
+}).RequireAuthorization();
 
 app.MapPost("/download", (GeneratorInput input) => 
 {
@@ -43,8 +42,8 @@ app.MapPost("/download", (GeneratorInput input) =>
 
     var pdf = pdfService.GeneratePdf(input.Html);
     return Results.File(pdf, "application/pdf", "GeneratedPdf.pdf");
-});
+}).RequireAuthorization();
 
-app.MapPost("/token", (User user) => $"Generation token for user {user.Username}");
+app.MapPost("/token", (User user) => $"Generation token for user {user.UserName}");
 
 app.Run();
