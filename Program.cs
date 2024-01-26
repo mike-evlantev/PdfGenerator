@@ -12,17 +12,12 @@ builder.Services.AddSingleton<PdfService>();
 var app = builder.Build();
 using var pdfService = app.Services.GetService<PdfService>()!;
 
-//https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-7.0
-//https://www.infoworld.com/article/3669188/how-to-implement-jwt-authentication-in-aspnet-core-6.html
-
 app.MapGet("/ping", () => 
 {
-    var issuer = builder.Configuration["Authentication:Schemes:Bearer:ValidIssuer"];
-
-    return Results.Ok(issuer);
+    return Results.Ok("pong");
 });
 
-app.MapPost("/generate", (GeneratorInput input) => 
+app.MapPost("/generate", (PdfRequest input) => 
 {
     if (string.IsNullOrEmpty(input.Html))
     {
@@ -33,7 +28,7 @@ app.MapPost("/generate", (GeneratorInput input) =>
     return Results.Ok(pdf);
 }).RequireAuthorization();
 
-app.MapPost("/download", (GeneratorInput input) => 
+app.MapPost("/download", (PdfRequest input) => 
 {
     if (string.IsNullOrEmpty(input.Html))
     {
@@ -43,7 +38,5 @@ app.MapPost("/download", (GeneratorInput input) =>
     var pdf = pdfService.GeneratePdf(input.Html);
     return Results.File(pdf, "application/pdf", "GeneratedPdf.pdf");
 }).RequireAuthorization();
-
-app.MapPost("/token", (User user) => $"Generation token for user {user.UserName}");
 
 app.Run();
