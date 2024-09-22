@@ -80,7 +80,18 @@
             "dependsOn": [
                 "docker-build: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "containerName": "pdf-generator",
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development",
+                },
+                "ports": [
+                    {
+                        "hostPort": 5272,
+                        "containerPort": 8080
+                    }
+                ],
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/PdfGenerator.csproj",
                 "enableDebugging": true
