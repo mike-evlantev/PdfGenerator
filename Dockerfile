@@ -15,5 +15,5 @@ RUN dotnet publish "PdfGenerator.csproj" -c Release -o /app/publish /p:UseAppHos
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "PdfGenerator.dll"]
